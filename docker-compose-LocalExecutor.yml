@@ -1,4 +1,4 @@
-version: '3.7'
+version: '2.0'
 services:
     postgres:
         image: postgres:9.6
@@ -35,11 +35,11 @@ services:
         ports:
             - "8080:8080"
         command: webserver
-        healthcheck:
-            test: ["CMD-SHELL", "[ -f /usr/local/airflow/airflow-webserver.pid ]"]
-            interval: 30s
-            timeout: 30s
-            retries: 3
+#        healthcheck:
+#            test: ["CMD-SHELL", "[ -f /usr/local/airflow/airflow-webserver.pid ]"]
+#            interval: 30s
+#            timeout: 30s
+#            retries: 3
 
     vault:
         image: vault

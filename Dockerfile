@@ -1,8 +1,9 @@
-# VERSION 1.10.9
-# AUTHOR: Matthieu "Puckel_" Roisil
-# DESCRIPTION: Basic Airflow container
-# BUILD: docker build --rm -t puckel/docker-airflow .
-# SOURCE: https://github.com/puckel/docker-airflow
+# VERSION 1.10.12
+# AUTHOR: Matthieu "Puckel_" Roisil - Extended Osborne
+# DESCRIPTION: Airflow container
+# BUILD: docker build --rm -t osb/docker-airflow .
+# SOURCE: https://github.com/osb/docker-airflow
+# BUILD docker build --build-arg DOCKER_UID=`id -u` --rm -t osb/docker-airflow .
 
 FROM python:3.7-slim-buster
 LABEL maintainer="Puckel_"
@@ -24,6 +25,8 @@ ENV LANG en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
 ENV LC_CTYPE en_US.UTF-8
 ENV LC_MESSAGES en_US.UTF-8
+
+USER root
 
 # Disable noisy "Handling signal" log messages:
 # ENV GUNICORN_CMD_ARGS --log-level WARNING
@@ -59,6 +62,7 @@ RUN set -ex \
     && pip install pyOpenSSL \
     && pip install ndg-httpsclient \
     && pip install pyasn1 \
+    && pip install docker \
     && pip install pyarrow \
     && pip install apache-airflow[crypto,celery,postgres,hive,jdbc,mysql,ssh${AIRFLOW_DEPS:+,}${AIRFLOW_DEPS}]==${AIRFLOW_VERSION} \
     && pip install install airflow_fs[all] \
@@ -78,7 +82,16 @@ RUN set -ex \
 COPY script/entrypoint.sh /entrypoint.sh
 COPY config/airflow.cfg ${AIRFLOW_USER_HOME}/airflow.cfg
 
+ARG DOCKER_UID
+
+RUN \
+    : "${DOCKER_UID:?Build argument DOCKER_UID needs to be set and non-empty. Use 'make build' to set it automatically.}" \
+    && usermod -u ${DOCKER_UID} airflow \
+    && echo "Set airflow's uid to ${DOCKER_UID}"
+
 RUN chown -R airflow: ${AIRFLOW_USER_HOME}
+
+#RUN chgrp -R 0 /some/directory && chmod -R g+rwX /some/directory
 
 EXPOSE 8080 5555 8793
 
