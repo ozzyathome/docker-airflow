@@ -7,9 +7,9 @@ services:
             - "8200:8200"
         restart: always
         volumes:
-            - ./volumes/logs:/vault/logs
-            - ./volumes/file:/vault/file
-            - ./volumes/config:/vault/config
+            - /home/airflow/volumes/logs:/vault/logs
+            - /home/airflow/volumes/file:/vault/file
+            - /home/airflow/volumes/config:/vault/config
         cap_add:
             - IPC_LOCK
         entrypoint: vault server -config=/vault/config/vault.json

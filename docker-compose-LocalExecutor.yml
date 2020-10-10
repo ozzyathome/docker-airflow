@@ -19,18 +19,20 @@ services:
         environment:
             - LOAD_EX=n
             - EXECUTOR=Local
+#       user: "${MYUID}:${MYGID}"
         logging:
             options:
                 max-size: 10m
                 max-file: "3"
         volumes:
-            - ./dags:/usr/local/airflow/dags
-            - ./hades:/usr/local/hades
-            - ./input:/usr/local/input
-            - ./output:/usr/local/output
-            - ./working:/usr/local/working
-            - ./script:/usr/local/script
-            - ./plugins:/usr/local/airflow/plugins
+            - /var/run/docker.sock:/var/run/docker.sock
+            - /home/airflow/dags:/usr/local/airflow/dags
+            - /home/airflow/hades:/usr/local/hades
+            - /home/airflow/input:/usr/local/input
+            - /home/airflow/output:/usr/local/output
+            - /home/airflow/working:/usr/local/working
+            - /home/airflow/script:/usr/local/script
+            - /home/airflow/plugins:/usr/local/airflow/plugins
 
         ports:
             - "8080:8080"
@@ -43,14 +45,14 @@ services:
 
     vault:
         image: vault
-        container_name: vault
+        container_name: vault-airflow
         ports:
             - "8200:8200"
         restart: always
         volumes:
-            - ./volumes/logs:/vault/logs
-            - ./volumes/file:/vault/file
-            - ./volumes/config:/vault/config
+            - /home/airflow/volumes/logs:/vault/logs
+            - /home/airflow/volumes/file:/vault/file
+            - /home/airflow/volumes/config:/vault/config
         cap_add:
             - IPC_LOCK
         entrypoint: vault server -config=/vault/config/vault.json
