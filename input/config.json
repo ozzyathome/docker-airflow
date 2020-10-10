@@ -1,0 +1,44 @@
+{
+   "task": "Masking",
+   "extension": "csv",
+  "inputFormat": "CSV",
+  "inputOptions": {
+    "fieldDelimiter": ",",
+    "quoteChar": "\"",
+    "hasHeader": true,
+    "trimFields": false
+  },
+  "taskOptions":{
+    "toBeMasked" : {
+      "NAME": "REDACT",
+      "SURNAME": "NAME",
+      "EMAIL": "EMAIL",
+      "DateOfBirth": "DATETIME"
+    },
+
+    "predefinedRelationships": null,
+    "maskingProviders": null,
+    "maskingProvidersConfig": {
+      "_fields" : {
+          "NAME": {
+            "redact.replace.character": "#",
+            "redact.preserve.length": false,
+            "redact.replace.length": 3
+          },
+          "DateOfBirth": {
+            "datetime.generalize.year": true
+          }
+      },
+      "_defaults": {
+            "datetime.format.fixed": "yyyy-MM-dd"
+      }
+    }
+  },
+  "outputFormat":"CSV",
+  "outputOptions":{
+    "fieldDelimiter":",",
+    "quoteChar":"\"",
+    "hasHeader": true,
+    "trimFields":false
+  }
+}
