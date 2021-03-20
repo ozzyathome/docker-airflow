@@ -43,16 +43,16 @@ services:
 #            timeout: 30s
 #            retries: 3
 
-    vault:
-        image: vault
-        container_name: vault-airflow
-        ports:
-            - "8200:8200"
-        restart: always
-        volumes:
-            - /home/airflow/volumes/logs:/vault/logs
-            - /home/airflow/volumes/file:/vault/file
-            - /home/airflow/volumes/config:/vault/config
-        cap_add:
-            - IPC_LOCK
-        entrypoint: vault server -config=/vault/config/vault.json
+#    vault:
+#        image: vault
+#        container_name: vault-airflow
+#        ports:
+#            - "8200:8200"
+#        restart: always
+#        volumes:
+#            - /home/airflow/volumes/logs:/vault/logs
+#            - /home/airflow/volumes/file:/vault/file
+#            - /home/airflow/volumes/config:/vault/config
+#        cap_add:
+#            - IPC_LOCK
+#        entrypoint: vault server -config=/vault/config/vault.json
