@@ -62,6 +62,7 @@ RUN set -ex \
     && pip install pyasn1 \
     && pip install docker \
     && pip install pyarrow \
+    && pip install Flask-SQLAlchemy \
     && pip install apache-airflow[crypto,celery,postgres,hive,jdbc,mysql,ssh${AIRFLOW_DEPS:+,}${AIRFLOW_DEPS}]==${AIRFLOW_VERSION} \
     && pip install install airflow_fs[all] \
     && pip install 'redis==3.2' \
